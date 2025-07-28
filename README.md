@@ -33,9 +33,76 @@ git config --global http.timeout 300          # 设置 HTTP 超时为 300 秒（
 
 ```
 
-![image-20250728101620639](F:\aziliao\note\jc\gitClone\image-20250728101620639.png)
+具体端口号参考下面内容：
+
+![image-20250728101620639](./img/image-20250728101620639.png)
+
+**验证是否配置成功**
+
+```sh
+git config --list # 结果如果出现 http.proxy=127.0.0.1:7897 等前面配置的内容则代表成功，如果没有，重新执行上面命令
+```
+
+**使用 git clone 操作验证速度 **
+
+```sh
+git clone https://github.com/LecterChu/nwpu-cram.git
+```
 
 
 
+****
 
+# 其他问题，例如从国外某网站下载内容到文件，的速度加快方法
+
+## 前提同上，需要按照教程实现翻墙
+
+****
+
+## 示例：realsense 中 realsense-ros 的源码编译安装
+
+- Create a ROS2 workspace
+
+  ```sh
+  mkdir -p ~/ros2_ws/src
+  cd ~/ros2_ws/src/
+  ```
+
+  
+
+- Clone the latest ROS Wrapper for Intel® RealSense™ cameras from [here](https://github.com/IntelRealSense/realsense-ros.git) into '~/ros2_ws/src/'
+
+  ```sh
+  git clone https://github.com/IntelRealSense/realsense-ros.git -b ros2-master
+  cd ~/ros2_ws
+  ```
+
+  
+
+- Install dependencies
+
+```sh
+sudo apt-get install python3-rosdep -y
+sudo rosdep init # "sudo rosdep init --include-eol-distros" for Foxy and earlier
+rosdep update # "sudo rosdep update --include-eol-distros" for Foxy and earlier
+
+```
+
+**这里一般都执行无法通过，主要问题出在  rosdep update 上，因为该命令需要按照前一条命令中得到的链接去下载内容，而下载这些外网网页内容非常慢，最终导致无法下载报错**
+
+
+
+## ubuntu 执行命令
+
+```sh
+export https_proxy=http://127.0.0.1:7897 http_proxy=http://127.0.0.1:7897  # 替换为你的代理端口
+```
+
+再执行命令
+
+```sh
+rosdep update
+```
+
+会发现速度显著提高，一路顺畅无阻，最终没有报错执行完毕
 
